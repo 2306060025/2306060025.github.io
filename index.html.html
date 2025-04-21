@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebGIS cơ bản với Leaflet</title>
+    <title>WebGIS - Trường Đại học Hà Nội</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -21,25 +21,17 @@
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    // Khởi tạo bản đồ tại vị trí Hà Nội
-    var map = L.map('map').setView([21.0017,105.7972], 13);
+    // Khởi tạo bản đồ tại vị trí Trường Đại học Hà Nội
+    var map = L.map('map').setView([21.0017, 105.7972], 17);
 
     // Thêm lớp nền từ OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Thêm marker đơn giản
-    var marker = L.marker([21.0285, 105.8542]).addTo(map);
-    marker.bindPopup("<b>Hà Nội</b><br>Thủ đô Việt Nam.").openPopup();
-
-    // Thêm polygon ví dụ (tam giác quanh khu vực Hà Nội)
-    var polygon = L.polygon([
-        [21.03, 105.85],
-        [21.02, 105.86],
-        [21.025, 105.84]
-    ]).addTo(map);
-    polygon.bindPopup("Khu vực ví dụ");
+    // Thêm marker tại Trường Đại học Hà Nội
+    var marker = L.marker([21.0017, 105.7972]).addTo(map);
+    marker.bindPopup("<b>Trường Đại học Hà Nội</b><br>Khu vực Km9, đường Nguyễn Trãi.").openPopup();
 </script>
 
 </body>
