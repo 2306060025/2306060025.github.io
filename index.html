@@ -1,48 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebGIS Bao Linh Lake</title>
     <meta charset="utf-8" />
+    <title>WebGIS Hồ Bảo Linh</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Link tới thư viện LeafletJS -->
+    
+    <!-- Link thư viện Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <!-- Leaflet Layers Control -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-layers-expanded/dist/leaflet-control-layers-expanded.min.css" />
+    <script src="https://unpkg.com/leaflet-control-layers-expanded/dist/leaflet-control-layers-expanded.min.js"></script>
+
     <style>
-        #map {
-            height: 100vh; /* Full màn hình */
-        }
+        #map { height: 100vh; }
     </style>
 </head>
+
 <body>
+    <h2 style="text-align:center;">WebGIS Hồ Bảo Linh</h2>
+    <div id="map"></div>
 
-<div id="map"></div>
+    <script>
+        // Tạo bản đồ
+        var map = L.map('map').setView([21.879, 105.636], 14);
 
-<script>
-    // Tạo bản đồ nền
-    var map = L.map('map').setView([21.0, 105.8], 13); // chỉnh tọa độ gần Bao Linh Lake nếu cần
-
-    // Add OpenStreetMap Tile
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Add lớp GeoJSON Bao Linh Lake
-    fetch('baolinh.geojson')
-        .then(response => response.json())
-        .then(data => {
-            L.geoJSON(data, {
-                style: {
-                    color: 'blue',
-                    weight: 2,
-                    fillColor: 'cyan',
-                    fillOpacity: 0.5
-                }
-            }).addTo(map);
+        // Nền OSM
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
         });
-</script>
+
+        // Nền Satellite (ảnh vệ tinh)
+        var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '© Esri'
+        });
+
+        // Thêm OSM mặc định
+        osm.addTo(map);
+
+        // Thêm GeoJSON
+        var baoLinh = new L.GeoJSON.AJAX("baolinh.geojson", {
+            style: function (feature) {
+                return {
+                    color: "red",
+                    weight: 2,
+                    fillColor: "lightblue",
+                    fillOpacity: 0.5
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties && feature.properties.name) {
+                    layer.bindPopup(feature.properties.name);
+                }
+            }
+        }).addTo(map);
+
+        // Control chọn lớp
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "Satellite": satellite
+        };
+
+        var overlayMaps = {
+            "Hồ Bảo Linh": baoLinh
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+    </script>
+
+    <!-- Thư viện leaflet-ajax để load GeoJSON -->
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
 
 </body>
 </html>
