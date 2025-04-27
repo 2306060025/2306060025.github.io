@@ -58,6 +58,10 @@
             }
         }).addTo(map);
 
+        // Thêm marker với popup tên địa điểm
+        var marker = L.marker([21.879, 105.636]).addTo(map);
+        marker.bindPopup("<b>Hồ Bảo Linh</b><br>Thái Nguyên");
+
         // Control chọn lớp
         var baseMaps = {
             "OpenStreetMap": osm,
