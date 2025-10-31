@@ -1,6 +1,88 @@
-{
-  "co2": 522,
-  "waste": 154,
-  "partners": 35,
-  "updated": "10/2025"
-}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Outcome — Green Connect Clone</title>
+  <style>
+    :root{
+      --green:#0b7a4b;
+      --muted:#f4fff7;
+      --card:#ffffff;
+    }
+    body{ margin:0; font-family: "Segoe UI", Roboto, Arial, sans-serif; background:var(--muted); color:#073b2e;}
+    header{ background:var(--green); color:white; padding:18px 16px; text-align:center; }
+    .container{ max-width:1000px; margin:28px auto; padding:0 16px; }
+    .card{ background:var(--card); border-radius:12px; box-shadow:0 6px 18px rgba(2,46,22,0.06); padding:20px; margin:12px 0; }
+    h1{ margin:0 0 8px 0; font-size:1.6rem; }
+    .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-top:12px; }
+    .stat{ text-align:center; padding:18px; }
+    .num{ font-size:2.4rem; font-weight:700; color:var(--green); }
+    .label{ color:#3b6f54; margin-top:6px; font-weight:600; }
+    .meta{ text-align:center; color:#4b6b59; margin-top:8px; font-size:0.95rem;}
+    footer{ text-align:center; padding:18px 0; color:#2d5e46; font-size:0.9rem; margin-top:26px;}
+    /* responsive small */
+    @media (max-width:420px){
+      .num{ font-size:1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Green Connect — Outcome</strong>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Tổng quan tác động</h1>
+      <p>Phần này hiển thị các chỉ số Outcome của dự án. Cập nhật bằng cách sửa file <code>data.json</code> trong repo.</p>
+
+      <div class="grid">
+        <div class="stat">
+          <div class="num" id="co2">—</div>
+          <div class="label">Tấn CO₂e giảm thải</div>
+        </div>
+
+        <div class="stat">
+          <div class="num" id="waste">—</div>
+          <div class="label">Tấn rác tái chế</div>
+        </div>
+
+        <div class="stat">
+          <div class="num" id="partners">—</div>
+          <div class="label">Đối tác tham gia</div>
+        </div>
+      </div>
+
+      <p class="meta">Cập nhật: <span id="updated">—</span></p>
+    </section>
+  </main>
+
+  <footer class="card">
+    © <span id="year"></span> Green Connect Clone — Được lưu trên GitHub Pages
+  </footer>
+
+  <script>
+    // show current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // load data.json from same repo root
+    fetch('data.json', {cache: "no-store"})
+      .then(resp => {
+        if (!resp.ok) throw new Error('Không thể tải data.json (' + resp.status + ')');
+        return resp.json();
+      })
+      .then(data => {
+        // bảo đảm tồn tại các thuộc tính trước khi gán
+        if (data.co2 !== undefined) document.getElementById('co2').textContent = data.co2;
+        if (data.waste !== undefined) document.getElementById('waste').textContent = data.waste;
+        if (data.partners !== undefined) document.getElementById('partners').textContent = data.partners;
+        if (data.updated !== undefined) document.getElementById('updated').textContent = data.updated;
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('updated').textContent = 'Lỗi tải dữ liệu';
+      });
+  </script>
+</body>
+</html>
